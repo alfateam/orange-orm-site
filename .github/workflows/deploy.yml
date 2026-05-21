@@ -41,13 +41,15 @@ jobs:
         with:
           node-version: 24
       - name: Setup Pages
-        uses: actions/configure-pages@v4
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
       - name: Install dependencies
         run: npm install
       - name: Build with VitePress
         run: npm run build # or pnpm docs:build / yarn docs:build / bun run docs:build
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: docs/.vitepress/dist
 
