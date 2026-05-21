@@ -8,15 +8,15 @@ const discussionIcon = fs.readFileSync(path.resolve(__dirname, '../assets/discus
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  base: '/orange-orm-docs/',
+  base: '/orange-orm-site/',
   title: 'ORANGE ORM',
   description: 'Fetch rows directly in the browser. Developer friendly, concise with with powerful filtering.',
   ignoreDeadLinks: false,
-  head: [['link', { rel: 'icon', href: '/orange-orm-docs/icon.svg' }]],
+  head: [['link', { rel: 'icon', href: '/orange-orm-site/icon.svg' }]],
   lang: 'en-US',
   lastUpdated: false,
   sitemap: {
-    hostname: 'https://orange-orm.io',
+    hostname: 'https://alfateam.github.io/orange-orm-site/',
   },
   themeConfig: {
     logo: '/icon.svg',
