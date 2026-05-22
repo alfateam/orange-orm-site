@@ -5,14 +5,33 @@ import { defineConfig } from 'vitepress'
 import llmstxt from 'vitepress-plugin-llms'
 
 const discussionIcon = fs.readFileSync(path.resolve(__dirname, '../assets/discussion.svg'), 'utf-8')
+const siteUrl = 'https://orange-orm.io/'
+const siteTitle = 'ORANGE ORM'
+const siteDescription = 'Fetch rows directly in the browser. Developer friendly, concise with with powerful filtering.'
+const previewImage = `${siteUrl}social-preview.png`
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   base: '/',
-  title: 'ORANGE ORM',
-  description: 'Fetch rows directly in the browser. Developer friendly, concise with with powerful filtering.',
+  title: siteTitle,
+  description: siteDescription,
   ignoreDeadLinks: false,
-  head: [['link', { rel: 'icon', href: '/icon.svg' }]],
+  head: [
+    ['link', { rel: 'icon', href: '/icon.svg' }],
+    ['meta', { property: 'og:type', content: 'website' }],
+    ['meta', { property: 'og:url', content: siteUrl }],
+    ['meta', { property: 'og:title', content: siteTitle }],
+    ['meta', { property: 'og:description', content: siteDescription }],
+    ['meta', { property: 'og:image', content: previewImage }],
+    ['meta', { property: 'og:image:width', content: '1200' }],
+    ['meta', { property: 'og:image:height', content: '630' }],
+    ['meta', { property: 'og:image:alt', content: 'Orange ORM logo' }],
+    ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
+    ['meta', { name: 'twitter:title', content: siteTitle }],
+    ['meta', { name: 'twitter:description', content: siteDescription }],
+    ['meta', { name: 'twitter:image', content: previewImage }],
+    ['meta', { name: 'twitter:image:alt', content: 'Orange ORM logo' }],
+  ],
   lang: 'en-US',
   lastUpdated: false,
   sitemap: {
