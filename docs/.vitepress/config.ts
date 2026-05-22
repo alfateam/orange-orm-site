@@ -19,6 +19,10 @@ export default defineConfig({
   ignoreDeadLinks: false,
   head: [
     ['link', { rel: 'icon', href: '/icon.svg' }],
+    ['link', { rel: 'alternate icon', href: '/favicon.ico' }],
+    ['link', { rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png' }],
+    ['link', { rel: 'manifest', href: '/site.webmanifest' }],
+    ['meta', { name: 'theme-color', content: '#f7931e' }],
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:url', content: siteUrl }],
     ['meta', { property: 'og:title', content: previewTitle }],
