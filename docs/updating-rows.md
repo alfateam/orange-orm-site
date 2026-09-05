@@ -59,6 +59,8 @@ async function update() {
 }
 ```
 
+If the fetching strategy contains [ad-hoc relations](/fetching-strategies#ad-hoc-relations), `saveChanges()` re-runs those projections for the affected rows after the update. Their in-memory values are replaced with fresh query results. Ad-hoc rows themselves are read-only and changes made directly to them are not persisted.
+
 ## Selective updates
 
 The update method is ideal for updating specific columns and relationships across one or multiple rows. You must provide a where filter to specify which rows to target. If you include a fetching strategy, the affected rows and their related data will be returned; otherwise, no data is returned.

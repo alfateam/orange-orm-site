@@ -48,6 +48,8 @@ async function getRows() {
 }
 ```
 
+For a mapped `hasMany` relation such as `lines`, `limit` and `offset` are applied independently for each parent order. The same per-parent pagination applies to an ad-hoc `many()` relation. Add an `orderBy` whenever the selected page must be deterministic.
+
 ## With aggregated results {#aggregate-results}
 
 You can count records and aggregate numerical columns.
