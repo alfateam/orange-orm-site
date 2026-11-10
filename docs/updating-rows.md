@@ -2,6 +2,8 @@
 
 To update rows, modify the property values and invoke the method `saveChanges()`. The function updates only the modified columns, not the entire row. Rows in child relations can also be updated as long as the parent order <i>owns</i> the child tables.
 
+This workflow requires tracked results from methods such as `getMany()`, `getOne()` or `getById()`. Their [`.plain()` variants](./fetching-rows.md#plain-results) return data without `saveChanges()`; changing those objects only changes local data.
+
 In our illustration, the `order` table owns both the `deliveryAddress` and the `lines` tables because they're part of a <i>hasOne/hasMany relationship</i>.
 
 Contrastingly, the `customer`is part of a <i>reference relationship</i> and thus can't be updated here. But you can detach the reference to the customer by assigning it to null or undefined.\

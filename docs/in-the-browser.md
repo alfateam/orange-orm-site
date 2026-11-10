@@ -74,6 +74,35 @@ serve({ fetch: app.fetch, port: 3000 });
 
 `baseFilter` and transaction hooks are also supported in `db.hono({...})`, using Hono-style request/response objects.
 
+## Plain reads {#plain-reads}
+
+The HTTP client supports the same untracked fetch methods as a local database client:
+
+```ts
+import map from './map';
+
+const db = map.http('http://localhost:3000/orange');
+
+db.interceptors.request.use(config => {
+  config.headers.Authorization = 'Bearer <token>';
+  return config;
+});
+
+const orders = await db.order.getMany.plain({
+  where: x => x.customerId.eq(42),
+  orderBy: 'id',
+  lines: true
+});
+const firstOrder = await db.order.getOne.plain({ orderBy: 'id' });
+const order = await db.order.getById.plain(123, { lines: true });
+```
+
+`.plain()` skips client-side change tracking and reactive wrapping, which makes reads faster and lighter — especially for large result sets. It uses the existing server read operation, so authentication middleware, interceptors, transaction hooks, server-side `baseFilter`, table exposure and query validation still apply through Express and Hono. An explicit primary key cannot bypass the root table's `baseFilter`; ad-hoc targets must be exposed and keep their own `baseFilter`.
+
+Raw SQL queries and raw SQL filters remain disallowed over HTTP. Configure authentication and access rules on the server as with ordinary fetch methods; `.plain()` does not grant access or make the endpoint read-only.
+
+Results have no active record methods. `getMany.plain()` returns `[]` for no matches; `getOne.plain()` and `getById.plain()` return `undefined`. See [plain results](./fetching-rows.md#plain-results) for method details and TypeScript behavior.
+
 ## Interceptors and base filter {#interceptors-and-base-filter}
 
 In the next setup, axios interceptors are employed on the client side to add an Authorization header of requests. Meanwhile, on the server side, an Express middleware (validateToken) is utilized to ensure the presence of the Authorization header, while a base filter is applied on the order table to filter incoming requests based on the `customerId` extracted from this header.

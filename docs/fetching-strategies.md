@@ -2,6 +2,8 @@
 
 Efficient data retrieval is crucial for the performance and scalability of applications. The fetching strategy gives you the freedom to decide how much related data you want to pull along with your primary request. Below are examples of common fetching strategies, including fetching entire relations and subsets of columns. When no fetching strategy is present, it will fetch all columns without its relations.
 
+The same strategies work with [`getMany.plain()`, `getOne.plain()` and `getById.plain()`](./fetching-rows.md#plain-results). These variants return the selected data and relations without change tracking or active record methods.
+
 ## Including a relation
 
 This example fetches orders and their corresponding delivery addresses, including all columns from both entities.

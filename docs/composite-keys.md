@@ -28,3 +28,14 @@ const map = orange.map(x => ({
 
 export default map;
 ```
+
+## Fetching without change tracking
+
+`getById.plain()` takes the primary-key values in the order they are declared in the mapping, followed by an optional fetching strategy:
+
+```ts
+const order = await db.order.getById.plain('typeA', 100, { lines: true });
+const line = await db.orderLine.getById.plain('typeA', 100, 1);
+```
+
+Each call returns an untracked row or `undefined` when no row matches. Included relations are also untracked. See [plain results](./fetching-rows.md#plain-results).

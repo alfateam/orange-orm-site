@@ -168,6 +168,70 @@ async function getRows() {
 }
 ```
 
+## Plain results without change tracking {#plain-results}
+
+Use `getMany.plain()`, `getOne.plain()` and `getById.plain()` when you need data without change tracking or active record methods. Call `.plain()` on the fetch function, for example `db.order.getMany.plain({ lines: true })`.
+
+Plain results also give better performance. Because no change tracking proxies or active record methods are set up, rows are materialized faster and use less memory. This is especially noticeable when fetching large result sets or deeply nested relations. Prefer `.plain()` for read-only scenarios such as rendering lists, reports or serializing to JSON, and use the tracked fetch methods only when you intend to modify and save the rows.
+
+| Method | Result | No matching row |
+| --- | --- | --- |
+| `getMany.plain(strategy?)` | Array of untracked rows | `[]` |
+| `getOne.plain(strategy?)` | First matching untracked row | `undefined` |
+| `getById.plain(...keys, strategy?)` | Untracked row matching the primary key | `undefined` |
+
+### getMany.plain()
+
+```ts
+const orders = await db.order.getMany.plain({
+  where: x => x.customerId.eq(42),
+  orderBy: 'id',
+  limit: 20,
+  lines: { packages: true }
+});
+```
+
+Filtering, sorting, pagination and [fetching strategies](./fetching-strategies.md) work as with `getMany()`, including column selection, mapped relations and ad-hoc relations. All rows and nested relations in the result are untracked.
+
+### getOne.plain()
+
+```ts
+const firstOrder = await db.order.getOne.plain({
+  where: x => x.customerId.eq(42),
+  orderBy: 'id',
+  lines: true
+});
+
+if (firstOrder) {
+  console.log(firstOrder.id);
+}
+```
+
+This selects at most one row. Use `orderBy` when several rows can match and the choice of first row matters. An empty result is `undefined`.
+
+### getById.plain()
+
+```ts
+const order = await db.order.getById.plain(123);
+const orderWithLines = await db.order.getById.plain(123, { lines: true });
+```
+
+The optional fetching strategy follows the primary-key values. For [composite keys](./composite-keys.md), pass all key values in mapping order. An empty result is `undefined`.
+
+### Mutability and TypeScript
+
+Plain objects and arrays can be changed locally, but those edits are not tracked or persisted. They have no `saveChanges`, `save`, `refresh`, `delete`, `acceptChanges` or `clearChanges` methods. Use the regular tracked fetch methods for the [active record update workflow](./updating-rows.md).
+
+TypeScript infers the selected columns and relations without active record methods. `getOne.plain()` and `getById.plain()` include `undefined` in their return types. `.plain()` also skips the configured `db.reactive(...)` wrapper.
+
+The same methods are available on local transaction clients, such as `tx.order.getMany.plain()`.
+
+### HTTP access controls
+
+With `map.http(...)`, these methods use the same server read operation as their tracked counterparts. Authentication middleware, request interceptors, transaction hooks, server-side `baseFilter`, table exposure restrictions and query validation still apply through Express and Hono. Supplying a primary key does not bypass the root table's `baseFilter`. Ad-hoc relation targets must be exposed and retain their own `baseFilter`.
+
+Use the filter DSL over HTTP; `.plain()` does not enable raw SQL queries or raw SQL filters. See [plain reads in the browser](./in-the-browser.md#plain-reads) for an example.
+
 ## Many rows by primary key
 
 ```js
